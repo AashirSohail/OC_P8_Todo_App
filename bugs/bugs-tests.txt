@@ -1,0 +1,64 @@
+----Bugs----
+
+1)
+index.html
+Line 16
+Bug: 
+<input class="toggle-all" type="checkbox">
+Fix:
+<input id="toggle-all" class="toggle-all" type="checkbox">
+
+2)
+controller.js
+Line 96
+Bug:
+Controller.prototype.adddItem
+Fix:
+Controller.prototype.addItem
+
+3)
+store.js
+Line 87
+Bug:
+for (var i = 0; i < 6; i++) {
+	newId += charset.charAt(Math.floor(Math.random() * charset.length));
+}
+Fix:
+var repeat = true;
+while (repeat) {
+	for (var i = 0; i < 6; i++) {
+		newId += charset.charAt(Math.floor(Math.random() * charset.length));
+	}
+	repeat = false;
+	todos.forEach( todo => {
+		if(todo.id === newId) repeat = true;
+	}); 
+}
+
+
+----Performance----
+store.js
+Line 127
+Issue: Doube for loop that iterates the todos to get the id, then another loop iterates to split/remove that todo
+
+for (var i = 0; i < todos.length; i++) {
+    if (todos[i].id == id) {
+        todoId = todos[i].id;
+    }
+}
+
+for (var i = 0; i < todos.length; i++) {
+    if (todos[i].id == todoId) {
+        todos.splice(i, 1);
+    }
+}
+
+Fix:
+for (var i = 0; i < todos.length; i++) {
+    if (todos[i].id == id) {
+        todos.splice(i, 1);
+    }
+}
+
+-----Tests-----
+Added on lines #62, #86, #90, #137, #141, #146, #150, #156, and #196 of ControllerSpec.js.
